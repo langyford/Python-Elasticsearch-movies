@@ -128,14 +128,6 @@ def insertTaggings():
         if es.index(index="taggings", doc_type="tagging", id=result["id"], body=document):
             print("Tagging inserted")
             
-    
-def viewDBTables():
-    cursor = connectToDatabase()
-    #query = "SELECT name FROM sqlite_master WHERE type = 'table'"
-    query = "SELECT * FROM taggings LIMIT 1"
-    #query = "SELECT COUNT(*) AS count FROM sqlite_sequence";
-    results = queryDatabase(query, cursor)
-    print(results)
         
 insertMovies()
 insertActors()
@@ -143,5 +135,3 @@ insertGenres()
 insertSequences()
 insertTaggings()
 insertParts(0, 40000)
-
-#viewDBTables()

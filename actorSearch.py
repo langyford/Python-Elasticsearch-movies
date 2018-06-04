@@ -9,22 +9,13 @@ import tkinter
 es = Elasticsearch(['https://search-moviesearch-2gwtif2k6ovqc7mzn6nqixltgi.ap-southeast-2.es.amazonaws.com:443'])
 
 def search():
+    resultsList.delete(1.0, tkinter.END)
+    
     searchStr = searchBar.get()
-    searchResult = es.search(index="movies", body={"query": {"match": {'name':searchStr}}})
-    print(searchResult)
 
-def setupUI():
-    root = tkinter.Tk()
-    label = tkinter.Label(root, text="Movie search")
-    label.pack()
-    searchBar = tkinter.Entry(root)
-    searchBar.pack()
-    searchButton = tkinter.Button(root, text = "Search", command = search)
-    searchButton.pack()
+    resultsList.insert(tkinter.END, "Movies with: "+searchStr+" starring in them \n \n")
     
-    
-    searchStr = searchBar.get()
-    searchResult = es.search(index="actors", body={"query": {"match": {'name':'Angelina Jolie'}}})
+    searchResult = es.search(index="actors", body={"query": {"match": {'name':searchStr}}})
     actorID = searchResult['hits']['hits'][0]['_id']
     
     searchResult = es.search(index="parts", body={"query": {"match": {'actor_id':actorID}}})
@@ -39,8 +30,18 @@ def setupUI():
         moviesData.append(searchResult)
     
     for movieData in moviesData:
-        print(movieData['hits']['hits'][0]['_source']['title'])
-        
-    root.mainloop()
-    
-setupUI()
+        resultsList.insert(tkinter.END, movieData['hits']['hits'][0]['_source']['title']+"\n")
+
+
+root = tkinter.Tk()
+label = tkinter.Label(root, text="Search an actor")
+label.pack()
+searchBar = tkinter.Entry(root)
+searchBar.pack()
+searchButton = tkinter.Button(root, text = "Search", command = search)
+searchButton.pack()
+resultsList = tkinter.Text(root)
+resultsList.pack()
+
+searchResult = es.search(index="actors", body={"query": {"match": {'name':""}}})
+root.mainloop()
