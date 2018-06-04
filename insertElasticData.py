@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import sys
-sys.path.append('/Users/lukelangford/Library/Python/2.7/lib/python/site-packages')
+#import sys
+#sys.path.append('/Users/lukelangford/Library/Python/2.7/lib/python/site-packages')
 
 import sqlite3
 from elasticsearch import Elasticsearch
